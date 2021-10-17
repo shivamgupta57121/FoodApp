@@ -65,6 +65,14 @@ function signupUser(req, res) {
 function loginUser(req, res) {
 
 }
+// middleware
+function setCreatedAt(req, res, next) {
+    req.body.createdAt = new Date().toISOString();
+    // return res.json({
+    //     text: "Bye Bye"
+    // });
+    next();
+}
 
 // // Post - giving data to server
 // app.post("/api/user", createUser);
@@ -94,7 +102,7 @@ app.use("/api/auth", authRouter);
 //     .get(getUserById);
 
 authRouter
-    .post("/signup", signupUser)
+    .post("/signup", setCreatedAt, signupUser)
     .post("/login", loginUser);
 
 // localhost:8080
