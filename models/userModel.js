@@ -38,18 +38,19 @@ const userSchema = new mongoose.Schema({
         validate: function () {
             return this.password == this.confirmPassword;
         }
+    },
+    createdAt: {
+        type: Date
     }
+})
+// order matters 
+// middleware
+userSchema.pre("save", function () {
+    // db confirm password will not be saved
+    // console.log("Hello");
+    this.confirmPassword = undefined;
 })
 // create model
 const userModel = mongoose.model("userModel", userSchema);
-// insert entry/document
-(async function createdUser() {
-    let user = await userModel.create({
-        name: "Shivam",
-        password: "123456789",
-        email: "abc@gmai.com",
-        age: 24,
-        confirmPassword: "123456789"
-    });
-    console.log("user", user);
-})();
+
+module.exports = userModel;
