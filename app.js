@@ -6,6 +6,7 @@ app.use(express.json());
 // Serve static files - folder designate
 app.use(express.static('public'))
 
+// code of routers will run first
 const userRouter = require("./Routers/userRouter");
 const authRouter = require("./Routers/authRouter");
 app.use("/api/user", userRouter);

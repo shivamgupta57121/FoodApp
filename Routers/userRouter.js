@@ -1,11 +1,12 @@
 const express = require("express");
 const userModel = require("../models/userModel");
-
+const protectRoute = require("./authHelper");
 // Mounting in express
 const userRouter = express.Router();
+// protect route as middleware for allowing access to only logged in user
 userRouter
     .route("/")
-    .get(getUsers);
+    .get(protectRoute, getUsers);
 
 userRouter
     .route("/:id")

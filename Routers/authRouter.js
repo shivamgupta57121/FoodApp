@@ -24,7 +24,9 @@ async function signupUser(req, res) {
         })
     }
 }
-
+// pending
+// password - encrypt in DB
+// login -> flag 
 async function loginUser(req, res) {
     // email ,password -> userModel -> 
     // findOne()
@@ -67,5 +69,9 @@ function setCreatedAt(req, res, next) {
     req.body.createdAt = new Date().toISOString();
     next();
 }
+
+// forget
+// reset
+// protect route 
 
 module.exports = authRouter;
