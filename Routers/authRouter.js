@@ -33,11 +33,17 @@ async function loginUser(req, res) {
     try {
         if (req.body.email) {
             let user = await userModel.findOne({ "email": req.body.email })
-            if (user.email == req.body.email && user.password == req.body.password) {
-                return res.status(200).json({
-                    user,
-                    "message": "user logged in "
-                })
+            if (user) {
+                if (user.password == req.body.password) {
+                    return res.status(200).json({
+                        user,
+                        "message": "user logged in "
+                    })
+                } else {
+                    return res.status(401).json({
+                        "message": "Email or password is wrong"
+                    })
+                }
             } else {
                 return res.status(401).json({
                     "message": "Email or password is wrong"
