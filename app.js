@@ -1,8 +1,10 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 // server init
 const app = express();
 // post accept
 app.use(express.json());
+app.use(cookieParser());
 // Serve static files - folder designate
 app.use(express.static('public'))
 

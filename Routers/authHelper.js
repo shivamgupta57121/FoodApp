@@ -2,11 +2,12 @@
 // logic to be written for flag
 // user should be asked to login first time only
 // not again and again
-let flag = false;
+// let flag = false;
 // middleware
 function protectRoute(req, res, next) {
+    console.log(req.cookies);
     try {
-        if (flag) {
+        if (req.cookies?.test=="1234") {
             next();
         } else {
             res.status(401).json({
