@@ -39,9 +39,8 @@ const userSchema = new mongoose.Schema({
             return this.password == this.confirmPassword;
         }
     },
-    createdAt: {
-        type: Date
-    }
+    createdAt: Date,
+    token: String
 })
 // order matters 
 // middleware
