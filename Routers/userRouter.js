@@ -13,6 +13,8 @@ userRouter
     .get(protectRoute, authorizeUser(["admin", "manager"]), getUserById)
     .patch(updateUser)
     .delete(protectRoute, authorizeUser(["admin"]), deleteUser);
+    // Used closure, since we have to pass function defination of middleware 
+    // and also need to accept argument to make authorization a generic middleware
 
 async function getUsers(req, res) {
     // find()
@@ -97,6 +99,7 @@ async function deleteUser(req, res) {
     }
 }
 
+// Using closure - refer above comment
 function authorizeUser(roleArr) {
     return async function (req, res, next) {
         let uid = req.uid;
