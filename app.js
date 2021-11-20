@@ -11,8 +11,10 @@ app.use(express.static('public'))
 // code of routers will run first
 const userRouter = require("./Routers/userRouter");
 const authRouter = require("./Routers/authRouter");
+const planRouter = require("./Routers/planRouter");
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/plan", planRouter);
 
 // localhost:8080
 app.listen(8080, function () {
