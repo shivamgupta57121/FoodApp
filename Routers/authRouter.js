@@ -9,7 +9,8 @@ const authRouter = express.Router();
 authRouter
     .post("/signup", setCreatedAt, signupUser)
     .post("/login", loginUser)
-    .post("/forgetPassword", forgetPassword);
+    .post("/forgetPassword", forgetPassword)
+    .post("/resetPassword", resetPassword);
 
 async function signupUser(req, res) {
     try {
@@ -122,6 +123,39 @@ async function forgetPassword(req, res) {
 }
 
 // reset
+async function resetPassword(req, res) {
+    let { token, password, confirmPassword } = req.body;
+    try {
+        if (token) {
+            // findOne
+            let user = await userModel.findOne({ token });
+            if (user) {
+                // method to update data
+                user.resetHandler(password, confirmPassword);
+                // save updated data in db
+                await user.save();
+                return res.status(200).json({
+                    message: "password reset success"
+                })
+            } else {
+                return res.status(404).json({
+                    message: "incorrect token"
+                })
+            }
+        }
+        else {
+            return res.status(404).json({
+                message: "token not found"
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 // protect route 
 
 module.exports = authRouter;
