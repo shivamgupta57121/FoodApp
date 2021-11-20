@@ -4,11 +4,18 @@
 // not again and again
 // let flag = false;
 // middleware
+
+const jwt = require("jsonwebtoken");
+const { JWT_KEY } = require("../secret");
+
 function protectRoute(req, res, next) {
     console.log(req.cookies);
     try {
-        if (req.cookies?.test=="1234") {
-            next();
+        if (req.cookies.jwt) {
+            let isVerified = jwt.verify(req.cookies.jwt, JWT_KEY);
+            if (isVerified) {
+                next();
+            }
         } else {
             res.status(401).json({
                 message: "You are not allowed"

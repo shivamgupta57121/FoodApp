@@ -1,4 +1,6 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const { JWT_KEY } = require("../secret");
 const userModel = require("../models/userModel");
 
 // Mounting in express
@@ -36,7 +38,12 @@ async function loginUser(req, res) {
             if (user) {
                 if (user.password == req.body.password) {
                     // header
-                    res.cookie("test", "1234", { httpOnly: true });
+                    // res.cookie("test", "1234", { httpOnly: true });
+                    let payload = user["_id"];
+                    // console.log("Key", JWT_KEY);
+                    var token = jwt.sign({ id: payload }, JWT_KEY);
+                    // console.log("Token", token);
+                    res.cookie("jwt", token, { httpOnly: true });
                     return res.status(200).json({
                         user,
                         "message": "user logged in "
