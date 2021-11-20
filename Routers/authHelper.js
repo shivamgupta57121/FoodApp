@@ -12,8 +12,9 @@ function protectRoute(req, res, next) {
     console.log(req.cookies);
     try {
         if (req.cookies.jwt) {
-            let isVerified = jwt.verify(req.cookies.jwt, JWT_KEY);
-            if (isVerified) {
+            let decryptedToken = jwt.verify(req.cookies.jwt, JWT_KEY);
+            if (decryptedToken) {
+                req.uid = decryptedToken.id;
                 next();
             }
         } else {

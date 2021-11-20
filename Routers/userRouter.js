@@ -10,9 +10,9 @@ userRouter
 
 userRouter
     .route("/:id")
-    .get(getUserById)
+    .get(protectRoute, authorizeUser(["admin", "manager"]), getUserById)
     .patch(updateUser)
-    .delete(deleteUser);
+    .delete(protectRoute, authorizeUser(["admin"]), deleteUser);
 
 async function getUsers(req, res) {
     // find()
@@ -94,6 +94,21 @@ async function deleteUser(req, res) {
             error: err.message,
             message: "can't delete user"
         })
+    }
+}
+
+function authorizeUser(roleArr) {
+    return async function (req, res, next) {
+        let uid = req.uid;
+        let { role } = await userModel.findById(uid);
+        let isAuthorized = roleArr.includes(role);
+        if (isAuthorized) {
+            next();
+        } else {
+            res.status(403).json({
+                message: "user not authorized contact admin"
+            })
+        }
     }
 }
 
