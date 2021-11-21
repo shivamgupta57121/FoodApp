@@ -2,7 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const { JWT_KEY } = require("../secret");
 const userModel = require("../models/userModel");
-const emailSender = require('../externalServices/emailSender');
+const emailSender = require('../helpers/emailSender');
 
 // Mounting in express
 const authRouter = express.Router();
