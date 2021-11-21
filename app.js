@@ -10,6 +10,7 @@ app.use(express.static('public'))
 
 // code of routers will run first
 const userRouter = require("./Routers/userRouter");
+// auth router -> verb -> create inside user
 const authRouter = require("./Routers/authRouter");
 const planRouter = require("./Routers/planRouter");
 app.use("/api/user", userRouter);

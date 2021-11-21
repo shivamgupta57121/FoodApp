@@ -6,7 +6,8 @@ const userRouter = express.Router();
 // protect route as middleware for allowing access to only logged in user
 userRouter
     .route("/")
-    .get(protectRoute, getUsers);
+    .get(protectRoute, authorizeUser(["admin"]), getUsers)
+    .post(protectRoute, authorizeUser(["admin"]), createUser);
 
 userRouter
     .route("/:id")
@@ -15,6 +16,28 @@ userRouter
     .delete(protectRoute, authorizeUser(["admin"]), deleteUser);
     // Used closure, since we have to pass function defination of middleware 
     // and also need to accept argument to make authorization a generic middleware
+
+async function createUser(req, res) {
+    try {
+        let userObj = req.body;
+        if (userObj) {
+            let user = await userModel.create(userObj);
+            return res.status(200).json({
+                message: "User Created",
+                user
+            })
+        } else {
+            return res.status(400).json({
+                message: "Kindly enter user data"
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: "Server error"
+        })
+    }
+}
 
 async function getUsers(req, res) {
     // find()
