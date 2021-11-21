@@ -35,16 +35,42 @@ async function createPlan(req, res) {
     }
 }
 
+// query params
+// localhost:8080/api/plan?select=name%price&page=1&sort=price&myQuery={"price":{"$gt":1500}}
 async function getPlans(req, res) {
     try {
-        // filter
-        // sort
-        // hide
-        // paginate
-        let plans = await planModel.find();
+        console.log(req.query);
+        let result;
+        if (Object.keys(req.query).length != 0) {
+            // filter 
+            // myQuery - greater than 1500
+            let myQuery = JSON.parse(req.query.myQuery);
+            console.log("myQuery:", myQuery);
+            let plansQuery = planModel.find(myQuery);
+
+            // sort - descending
+            let sortField = req.query.sort;
+            console.log("sortField:", sortField);
+            let sortQuery = plansQuery.sort(`-${sortField}`);
+
+            // show name and price only
+            let selectParams = req.query.select.split("%").join(" ");
+            console.log("select params:", selectParams);
+            let filteredQuery = sortQuery.select(`${selectParams} -_id`);
+
+            // pagination - skip(), limit()
+            let page = Number(req.query.page) || 1;
+            let limit = Number(req.query.limit) || 3;
+            let toSkip = (page - 1) * limit;
+            let paginatedResult = filteredQuery.skip(toSkip).limit(limit);
+
+            result = await paginatedResult;
+        } else {
+            result = await planModel.find();
+        }
         return res.status(200).json({
             message: "List of all plans",
-            plans
+            result
         })
     } catch (err) {
         console.log(err);
