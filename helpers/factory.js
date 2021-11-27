@@ -24,38 +24,35 @@ module.exports.createElement = function (ElementModel) {
 module.exports.getElements = function (ElementModel) {
     return async function (req, res) {
         try {
+            // query params
+            // localhost:8080/api/plan?select=name%price&page=1&sort=price&myQuery={"price":{"$gt":1500}}
             console.log(req.query);
-            let result;
-            if (Object.keys(req.query).length != 0) {
-                // filter 
-                // myQuery - greater than 1500
-                let myQuery = JSON.parse(req.query.myQuery);
-                console.log("myQuery:", myQuery);
-                let elementQuery = ElementModel.find(myQuery);
-
-                // sort - descending
-                let sortField = req.query.sort;
-                console.log("sortField:", sortField);
-                let sortQuery = elementQuery.sort(`-${sortField}`);
-
-                // show name and price only
-                let selectParams = req.query.select.split("%").join(" ");
-                console.log("select params:", selectParams);
-                let filteredQuery = sortQuery.select(`${selectParams} -_id`);
-
-                // pagination - skip(), limit()
-                let page = Number(req.query.page) || 1;
-                let limit = Number(req.query.limit) || 3;
-                let toSkip = (page - 1) * limit;
-                let paginatedResult = filteredQuery.skip(toSkip).limit(limit);
-
-                result = await paginatedResult;
+            let requestPromise;
+            // query
+            if (req.query.myQuery) {
+                requestPromise = ElementModel.find(JSON.parse(req.query.myQuery));
             } else {
-                result = await ElementModel.find();
+                requestPromise = ElementModel.find();
             }
-            return res.status(200).json({
-                message: "List of all elements",
-                result
+            // sort -> use (-) for descending order 
+            if (req.query.sort) {
+                requestPromise = requestPromise.sort(req.query.sort);
+            }
+            // select 
+            if (req.query.select) {
+                let params = req.query.select.split("%").join(" ");
+                requestPromise = requestPromise.select(params);
+            }
+            // pagination - skip(), limit()
+            let page = Number(req.query.page) || 1;
+            let limit = Number(req.query.limit) || 3;
+            let toSkip = (page - 1) * limit;
+            requestPromise = requestPromise
+                .skip(toSkip)
+                .limit(limit);
+            let elements = await requestPromise;
+            res.status(200).json({
+                elements
             })
         } catch (err) {
             console.log(err);
