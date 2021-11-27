@@ -13,9 +13,11 @@ const userRouter = require("./Routers/userRouter");
 // auth router -> verb -> create inside user
 const authRouter = require("./Routers/authRouter");
 const planRouter = require("./Routers/planRouter");
+const reviewRouter = require("./Routers/reviewRouter");
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/plan", planRouter);
+app.use("/api/review", reviewRouter);
 
 // localhost:8080
 app.listen(8080, function () {
