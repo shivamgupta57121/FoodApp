@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const cookieParser = require("cookie-parser");
 // server init
 const app = express();
@@ -18,6 +19,11 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/plan", planRouter);
 app.use("/api/review", reviewRouter);
+
+// 404 page not found
+app.use(function (req, res) {
+    res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+})
 
 // localhost:8080
 app.listen(8080, function () {
