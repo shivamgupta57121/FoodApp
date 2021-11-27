@@ -33,6 +33,12 @@ async function signupUser(req, res) {
 // password - encrypt in DB
 // login -> flag 
 async function loginUser(req, res) {
+    // Logic for Login ----------------------------------------------
+    // email -> find user -> user
+    // password match 
+    // reply - you are logged in
+    // send token - to authenticate user next time
+    // --------------------------------------------------------------
     // email ,password -> userModel -> 
     // findOne()
     try {

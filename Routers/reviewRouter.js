@@ -6,6 +6,9 @@ const ReviewRouter = express.Router();
 const factory = require("../helpers/factory");
 const protectRoute = require("./authHelper");
 
+// create review in DB
+// update average rating
+// add reviewId to respective plan
 const createReview = async function (req, res) {
     try {
         let review = await ReviewModel.create(req.body);

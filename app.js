@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 // post accept
 app.use(express.json());
+// cookies
 app.use(cookieParser());
 // Serve static files - folder designate
 app.use(express.static('public'))
