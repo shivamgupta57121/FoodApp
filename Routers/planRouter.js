@@ -13,6 +13,10 @@ const getPlanById = factory.getElementById(planModel);
 planRouter.use(protectRoute);
 
 planRouter
+    .route("/top3plans")
+    .get(top3Plans);
+
+planRouter
     .route("/:id")
     .get(getPlanById)
     .patch(updatePlan)
@@ -22,6 +26,33 @@ planRouter
     .route("/")
     .get(getPlans)
     .post(createPlan);
+
+async function top3Plans(req, res) {
+    try {
+        let plans = await planModel.find()
+            .sort({
+                ratingAverage: -1
+            })
+            .limit(3)
+            .populate({
+                path: 'reviews',
+                select: 'review rating'
+            });
+        console.log(plans);
+        res.status(200).json({
+            message: "Top 3 plans retrieved",
+            plans
+        })
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            message: "Server error"
+        })
+    }
+}
+
+// Learn -> cron job -> runs every 5 second (Not used in this) 
+
 
 // async function createPlan(req, res) {
 //     try {

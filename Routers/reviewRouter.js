@@ -12,6 +12,13 @@ const createReview = async function (req, res) {
         console.log("Review Created", review);
         let planId = review.plan;
         let plan = await PlanModel.findById(planId);
+        if(plan.ratingAverage) {
+            let ratingSum = plan.ratingAverage * plan.reviews.length;
+            let finalAvgRating = (ratingSum + review.rating) / (plan.reviews.length + 1);
+            plan.ratingAverage = finalAvgRating;
+        } else {
+            plan.ratingAverage = review.rating;
+        }
         plan.reviews.push(review["_id"]);
         await plan.save();
         res.status(200).json({
@@ -25,7 +32,6 @@ const createReview = async function (req, res) {
         })
     }
 };
-
 const getReviews = factory.getElements(ReviewModel);
 const updateReview = factory.updateElement(ReviewModel);
 const deleteReview = async function (req, res) {
@@ -48,7 +54,6 @@ const deleteReview = async function (req, res) {
         })
     }
 };
-
 const getReviewById = factory.getElementById(ReviewModel);
 
 ReviewRouter.use(protectRoute);
