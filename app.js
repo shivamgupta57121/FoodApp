@@ -16,10 +16,12 @@ const userRouter = require("./Routers/userRouter");
 const authRouter = require("./Routers/authRouter");
 const planRouter = require("./Routers/planRouter");
 const reviewRouter = require("./Routers/reviewRouter");
+const bookingRouter = require("./Routers/bookingRouter");
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/plan", planRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/booking", bookingRouter);
 
 // 404 page not found
 app.use(function (req, res) {

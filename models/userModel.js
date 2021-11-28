@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["admin", "user", "manager"],
         default: "user"
+    },
+    bookings: {
+        // array of object id
+        type: [mongoose.Schema.ObjectId],
+        ref: "bookingModel"
     }
 })
 // order matters 
