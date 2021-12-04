@@ -6,7 +6,7 @@
 // middleware
 
 const jwt = require("jsonwebtoken");
-const { JWT_KEY } = require("../secret");
+const { JWT_KEY } = process.env || require("../secret");
 
 function protectRoute(req, res, next) {
     console.log(req.cookies);

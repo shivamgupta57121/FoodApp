@@ -1,4 +1,4 @@
-const config = require("../secret");
+const config = process.env || require("../secret");
 const nodemailer = require("nodemailer");
 
 // async..await is not allowed in global scope, must use a wrapper

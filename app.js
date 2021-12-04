@@ -25,10 +25,13 @@ app.use("/api/booking", bookingRouter);
 
 // 404 page not found
 app.use(function (req, res) {
-    res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+    // res.status(404).sendFile(path.join(__dirname, "public", "404.html"));
+    res.status(404).json({
+        message: "404 Page Not Found"
+    });
 })
 
 // localhost:8080
-app.listen(8080, function () {
+app.listen(process.env.PORT || 8080, function () {
     console.log("server started at http://localhost:8080");
 })

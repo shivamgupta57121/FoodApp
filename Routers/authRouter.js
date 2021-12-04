@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { JWT_KEY } = require("../secret");
+const { JWT_KEY } = process.env || require("../secret");
 const userModel = require("../models/userModel");
 const emailSender = require('../helpers/emailSender');
 
