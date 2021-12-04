@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <!--
     <form action="">
         <label>Name</label>
         <input type="text">
@@ -32,6 +33,69 @@
             let resp = await axios.post("/api/auth/signup", { name, email, password });
             console.log(resp.data);
         })
+    </script>
+    -->
+    
+    <button id="rzp-button1">Pay</button>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        var options = {
+            // Dummy Data in case order ID is missing
+            // "key": "rzp_test_ZgHnPaeqT8CUk6", // Enter the Key ID generated from the Dashboard
+            // "amount": "50000", // Amount - Default Data
+            // "currency": "INR", // Currency - Default Data
+            "name": "Food App",
+            "description": "Order Transaction",
+            // "image": "https://example.com/your_logo",
+            // Order Id -> put from previous response 
+            // Pass the `id` obtained in the previous step
+            "order_id": "order_ITOyUCK3fVx1rO",
+            // success handler
+            "handler": function (response) {
+                alert("Transaction successful");
+                console.log(response);
+                console.log(response.razorpay_payment_id);
+                console.log(response.razorpay_order_id);
+                console.log(response.razorpay_signature)
+                // Post request should be made to verify payment
+                // var settings = {
+                //     "url": "/api/booking/verification",
+                //     "method": "POST",
+                //     "timeout": 0,
+                //     "headers": {
+                //         "Content-Type": "application/json"
+                //     },
+                //     "data": JSON.stringify({ response }),
+                // }
+            },
+            // If prefill is required
+            // Dummy Data for now
+            "prefill": {
+                "name": "Foody",
+                "email": "foody@abc.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
+        document.getElementById('rzp-button1').onclick = function (e) {
+            rzp1.open();
+            e.preventDefault();
+        }
     </script>
 </body>
 </html>
