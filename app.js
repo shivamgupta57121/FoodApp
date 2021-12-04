@@ -32,6 +32,7 @@ app.use(function (req, res) {
 })
 
 // localhost:8080
+// heroku physical -> multiple server run
 app.listen(process.env.PORT || 8080, function () {
     console.log("server started at http://localhost:8080");
 })
