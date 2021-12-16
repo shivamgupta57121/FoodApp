@@ -8,7 +8,8 @@ const factory = require("../helpers/factory");
 const protectRoute = require("./authHelper");
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const { KEY_ID, KEY_SECRET } = require("../secret") || process.env;
+const { KEY_ID, KEY_SECRET } = process.env;
+// const { KEY_ID, KEY_SECRET } = require("../secret");
 var razorpayInstance = new Razorpay({
     key_id: KEY_ID,
     key_secret: KEY_SECRET,

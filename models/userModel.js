@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator")
 //link
-let { DB_LINK } = require("../secret") || process.env;
+let { DB_LINK } = process.env;
+// let { DB_LINK } = require("../secret");
 // connection form
 mongoose.connect(DB_LINK).then(function (db) {
     // console.log(db);
