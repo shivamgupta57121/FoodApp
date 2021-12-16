@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const { JWT_KEY } = process.env
+const bcrypt = require("bcrypt");
+const { JWT_KEY } = require("../secret") || process.env;
 const userModel = require("../models/userModel");
 const emailSender = require('../helpers/emailSender');
 
@@ -45,7 +46,9 @@ async function loginUser(req, res) {
         if (req.body.email) {
             let user = await userModel.findOne({ "email": req.body.email })
             if (user) {
-                if (user.password == req.body.password) {
+                // compare with encrypted password
+                let areSame = await bcrypt.compare(req.body.password, user.password);
+                if (areSame) {
                     // header
                     // res.cookie("test", "1234", { httpOnly: true });
                     let payload = user["_id"];

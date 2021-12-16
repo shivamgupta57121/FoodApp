@@ -1,10 +1,38 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const mongoSanitize = require('express-mongo-sanitize');
 const path = require("path");
 const cookieParser = require("cookie-parser");
 // server init
 const app = express();
+// rate limit
+app.use(rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes window
+    max: 100, // start blocking after 100 requests
+    message:
+        "Too many requests from this IP, please try again after 15 minutes"
+}));
+// hpp - disallow extra query params
+app.use(hpp({
+    whitelist: [
+        'myQuery',
+        'sort',
+        'select',
+        'page',
+        'limit'
+    ]
+}));
+// to set http headers
+app.use(helmet());
 // post accept
 app.use(express.json());
+// cross site scripting 
+app.use(xss());
+// mongodb query sanatize
+app.use(mongoSanitize());
 // cookies
 app.use(cookieParser());
 // Serve static files - folder designate

@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const emailValidator = require("email-validator")
 //link
-let { DB_LINK } = process.env
+let { DB_LINK } = require("../secret") || process.env;
 // connection form
 mongoose.connect(DB_LINK).then(function (db) {
     // console.log(db);
@@ -54,7 +55,12 @@ const userSchema = new mongoose.Schema({
 })
 // order matters 
 // middleware
-userSchema.pre("save", function () {
+userSchema.pre("save", async function () {
+    // encrypt password
+    // generate salt
+    const salt = await bcrypt.genSalt(10);
+    // password convert to text
+    this.password = await bcrypt.hash(this.password, salt);
     // db confirm password will not be saved
     // console.log("Hello");
     this.confirmPassword = undefined;
