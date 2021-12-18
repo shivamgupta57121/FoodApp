@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const hpp = require("hpp");
 const helmet = require("helmet");
@@ -8,6 +9,8 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 // server init
 const app = express();
+// cors
+app.use(cors());
 // rate limit
 app.use(rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes window
