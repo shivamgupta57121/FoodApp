@@ -10,7 +10,7 @@ const updatePlan = factory.updateElement(planModel);
 const deletePlan = factory.deleteElement(planModel);
 const getPlanById = factory.getElementById(planModel);
 
-planRouter.use(protectRoute);
+// planRouter.use(protectRoute);
 
 planRouter
     .route("/top3plans")
@@ -18,14 +18,14 @@ planRouter
 
 planRouter
     .route("/:id")
-    .get(getPlanById)
-    .patch(updatePlan)
-    .delete(deletePlan);
+    .get(protectRoute, getPlanById)
+    .patch(protectRoute, updatePlan)
+    .delete(protectRoute, deletePlan);
 
 planRouter
     .route("/")
     .get(getPlans)
-    .post(createPlan);
+    .post(protectRoute, createPlan);
 
 async function top3Plans(req, res) {
     try {
